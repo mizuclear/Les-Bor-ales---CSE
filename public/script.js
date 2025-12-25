@@ -303,8 +303,6 @@ citySelect.addEventListener("change", renderPartners);
 tagSelect.addEventListener("change", renderPartners);
 sortSelect.addEventListener("change", renderPartners);
 
-document.getElementById("scroll-partners").addEventListener("click", () => scrollToSection("partners"));
-document.getElementById("open-partners").addEventListener("click", () => scrollToSection("partners"));
 document.getElementById("scroll-top").addEventListener("click", () => scrollToSection("top"));
 document.getElementById("scroll-how").addEventListener("click", () => scrollToSection("how"));
 
