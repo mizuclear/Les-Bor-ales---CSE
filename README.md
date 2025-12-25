@@ -1,98 +1,45 @@
-# Les Bor-ales - CSE
+# Pass Boréales — Portail avantages salariés
 
-## Project Overview
+Portail interne pour présenter les avantages partenaires du groupe Les Boréales. L'interface met l'accent sur la recherche rapide (<10s), des fiches normalisées et des mentions conformes (accès réservé, support, dernières mises à jour).
 
-Les Bor-ales is a Computer Science and Engineering (CSE) project dedicated to [brief description of your project goals].
+## Stack
+- Site statique servi par Node.js (`index.js`)
+- HTML/CSS/JS vanilla (mobile-first)
+- Données partenaires centralisées dans `public/data/partners.json`
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Features
-
-- Feature 1: Description of key feature
-- Feature 2: Description of key feature
-- Feature 3: Description of key feature
-
-## Installation
-
-### Prerequisites
-
-- Python 3.8 or higher
-- [Other dependencies as needed]
-
-### Setup
-
-1. Clone the repository:
+## Démarrer en local
 ```bash
-git clone https://github.com/mizuclear/Les-Bor-ales---CSE.git
-cd Les-Bor-ales---CSE
+npm install # (aucune dépendance, installe seulement npm pour le script)
+npm start   # lance un serveur sur http://localhost:3000
 ```
 
-2. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+## Ajouter ou mettre à jour un partenaire
+1. Ouvrir `public/data/partners.json`.
+2. Ajouter un objet dans le tableau `partners` avec les champs :
+   - `id` : identifiant unique (kebab-case)
+   - `name` : nom affiché
+   - `category` : ex. "Food & boissons", "Loisirs & sorties"
+   - `city` : ville principale (affichée et filtrable)
+   - `offer_short` : résumé de l'offre (cartes)
+   - `offer_details` : version détaillée (fiche)
+   - `access_type` : `badge` | `code` | `badge_or_code`
+   - `code` : valeur du code si applicable (sinon `null`)
+   - `address`, `maps_url`, `hours`, `conditions`
+   - `status` : `active` | `test` | `paused`
+   - `tags` : tableau limité à 1–2 tags (ex. "Nouveau", "Exclusif salariés", "En test")
+   - `updated_at` : date ISO (YYYY-MM-DD)
+   - `group_site` : établissement du groupe concerné
+   - `featured` : `true` si l'offre doit apparaître dans « Sélection du mois » (max 3)
+3. Sauvegarder le fichier. La recherche/filtration se base automatiquement sur ces valeurs.
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+## Déploiement
+- **Netlify** : le dépôt inclut `netlify.toml`. Le site est statique ; commande de build : `npm start` (ou servir directement le dossier `public`).
+- **GitHub Pages** : publier le contenu du dossier `public` (et `index.js` n'est pas nécessaire si vous utilisez un hébergement statique).
 
-## Usage
+## Accessibilité et mentions
+- `<meta name="robots" content="noindex,nofollow">` pour un usage interne.
+- Mentions en pied de page : accès réservé, offres susceptibles d'évoluer, absence de transmission de données personnelles, support identifié.
+- Fiches : code masqué jusqu'à action utilisateur, date de dernière mise à jour visible.
 
-### Running the Project
-
-```bash
-# Add commands here to run your project
-python main.py
-```
-
-### Examples
-
-```bash
-# Example usage:
-# Add specific examples of how to use your project
-```
-
-## Project Structure
-
-```
-Les-Bor-ales---CSE/
-├── README.md
-├── requirements.txt
-├── main.py
-├── src/
-│   ├── __init__.py
-│   └── modules/
-├── tests/
-│   └── test_*.py
-└── docs/
-    └── [documentation files]
-```
-
-## Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-**Last Updated:** 2025-12-25
-
-For questions or support, please open an issue on the GitHub repository.
+## Tests
+Aucun test automatisé n'est fourni pour l'instant. Exécutez `npm start` pour vérifier le rendu localement.
