@@ -266,10 +266,30 @@ async function copyCode(code) {
   }
 }
 
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add("visible");
-  setTimeout(() => toast.classList.remove("visible"), 2500);
+  document.querySelectorAll(".quick-filter").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const { filter, value } = e.currentTarget.dataset;
+      state.filters = { ...state.filters, category: "", city: "", access: "", tag: "", search: state.filters.search };
+      categorySelect.value = "";
+      citySelect.value = "";
+      accessSelect.value = "";
+      tagSelect.value = "";
+
+      if (filter === "city") {
+        state.filters.city = value;
+        citySelect.value = value;
+      }
+      if (filter === "access") {
+        state.filters.access = value;
+        accessSelect.value = value;
+      }
+      if (filter === "tag") {
+        state.filters.tag = value;
+        tagSelect.value = value;
+      }
+      renderPartners();
+    });
+  });
 }
 
 document.getElementById("report-issue").addEventListener("click", () => showToast("Signalement transmis au support."));
