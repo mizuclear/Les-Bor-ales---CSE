@@ -3,173 +3,229 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pass Boréales — Avantages locaux</title>
+  <meta name="robots" content="noindex,nofollow">
+  <title>Portail Avantages Salariés | Pass Boréales</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header class="site-header">
     <div class="brand">
       <img class="brand-logo" src="https://i.ibb.co/rRW5rKmZ/logo-removebg-preview.png" alt="Logo Les Boréales" loading="lazy">
       <div>
-        <p class="brand-name">PASS BORÉALES</p>
+        <p class="eyebrow">Portail Avantages Salariés</p>
+        <p class="brand-name">Pass Boréales</p>
       </div>
+    </div>
+    <div class="header-meta">
+      <p class="pill muted">Accès réservé aux collaborateurs</p>
+      <p class="updated" id="global-updated">Mises à jour en cours...</p>
     </div>
   </header>
 
-  <div class="snow-overlay" aria-hidden="true"></div>
-
   <main>
     <section class="hero" id="home">
-      <div class="hero-visual">
-        <div class="hero-photo-wrap">
-          <img src="https://i.ibb.co/xqX461Nw/20251225-105004.jpg" alt="Aurores boréales sur l'horizon marin" class="hero-photo" loading="lazy">
-          <div class="holiday-banner">Joyeuses fêtes ✨</div>
+      <div class="hero-text">
+        <p class="eyebrow">Portail interne</p>
+        <h1>Accédez aux avantages partenaires en moins de 10 secondes</h1>
+        <p class="lede">Recherche, filtres et fiches normalisées pour présenter les offres aux collaborateurs sans détour. Données centralisées, mentions claires, support identifié.</p>
+        <div class="search-panel" role="search">
+          <label class="sr-only" for="search-input">Rechercher un partenaire, une catégorie, une offre ou une ville</label>
+          <input id="search-input" type="search" placeholder="Rechercher un partenaire, une catégorie, une offre ou une ville" autocomplete="off">
+          <button class="ghost" id="reset-filters" type="button">Réinitialiser</button>
+        </div>
+        <div class="info-pills">
+          <span class="pill">Accès réservé aux collaborateurs</span>
+          <span class="pill">Support : support@pass-boreales.fr</span>
+          <span class="pill">Offres partenaires susceptibles d'évoluer</span>
         </div>
       </div>
-      <div class="hero-text">
-        <p class="eyebrow">Portail avantages — simple et fluide</p>
-        <h1>Retrouve un avantage en 10 secondes</h1>
-        <p class="lede">Pssst, c'est ton espace pour retrouver les bons plans des Boréales et de nos partenaires.</p>
-        <div class="hero-actions">
-          <button class="ghost" id="scroll-top">Top avantages du mois</button>
-        </div>
-        <div class="hero-badges">
-          <span class="badge">📱 Mobile friendly</span>
-          <span class="badge">⚡ 10s pour trouver</span>
-          <span class="badge">🧭 Filtrage clair</span>
-          <span class="badge festive">❄️ Joyeuses fêtes</span>
-        </div>
+      <div class="hero-card" aria-label="Règles d'usage">
+        <h3>Règles clés</h3>
+        <ul class="rules">
+          <li>Badge ou code selon la fiche partenaire (indiqué clairement).</li>
+          <li>Dernière mise à jour affichée sur chaque fiche.</li>
+          <li>Signalement en 1 clic vers le support.</li>
+          <li>Aucune donnée personnelle transmise aux partenaires.</li>
+        </ul>
       </div>
     </section>
 
-    <section class="top-picks" aria-labelledby="top-picks-title" id="top">
+    <section class="top-picks" aria-labelledby="top-picks-title" id="selection">
       <div class="section-head">
-        <h2 id="top-picks-title">Top avantages du mois</h2>
-        <p>3 à 6 pépites sélectionnées pour donner envie tout de suite.</p>
+        <div>
+          <h2 id="top-picks-title">Sélection du mois</h2>
+          <p>3 offres à partager en priorité avec les équipes.</p>
+        </div>
       </div>
-      <div class="card-grid" id="top-cards"></div>
+      <div class="card-grid" id="top-cards" aria-live="polite"></div>
     </section>
 
     <section class="partners" aria-labelledby="partners-title" id="partners">
       <div class="section-head">
         <div>
           <h2 id="partners-title">Tous les partenaires</h2>
-          <p>Listing filtrable : catégorie, ville, nouveautés, plus utilisés. Tri A→Z, nouveaux, proches, meilleures remises.</p>
-        </div>
-        <div class="filters">
-          <div class="filter-group">
-            <label for="filter-category">Catégorie</label>
-            <select id="filter-category">
-              <option value="">Toutes</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="filter-city">Ville</label>
-            <select id="filter-city">
-              <option value="">Toutes</option>
-              <option value="Villers">Villers</option>
-              <option value="Autres">Autres villes</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="filter-tag">Filtre rapide</label>
-            <select id="filter-tag">
-              <option value="">—</option>
-              <option value="nouveau">Nouveaux</option>
-              <option value="populaire">Les plus utilisés</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="sort-by">Tri</label>
-            <select id="sort-by">
-              <option value="az">A → Z</option>
-              <option value="nouveaux">Nouveaux</option>
-              <option value="proches">Proches</option>
-              <option value="remise">Meilleures remises</option>
-            </select>
-          </div>
+          <p>Recherche + filtres sans rechargement. Tri A → Z ou par date de mise à jour.</p>
         </div>
       </div>
+      <div class="filters" aria-label="Filtres de recherche">
+        <div class="filter-group">
+          <label for="filter-category">Catégorie</label>
+          <select id="filter-category">
+            <option value="">Toutes</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-city">Ville</label>
+          <select id="filter-city">
+            <option value="">Toutes</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-access">Type d'accès</label>
+          <select id="filter-access">
+            <option value="">Badge ou code</option>
+            <option value="badge">Badge</option>
+            <option value="code">Code</option>
+            <option value="badge_or_code">Badge ou code</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-tag">Tag</label>
+          <select id="filter-tag">
+            <option value="">Tous</option>
+            <option value="Nouveau">Nouveau</option>
+            <option value="Exclusif salariés">Exclusif salariés</option>
+            <option value="En test">En test</option>
+            <option value="Mise à jour en cours">Mise à jour en cours</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="sort-by">Tri</label>
+          <select id="sort-by">
+            <option value="alphabetical">A → Z</option>
+            <option value="recent">Dernières mises à jour</option>
+            <option value="status">Statut</option>
+          </select>
+        </div>
+      </div>
+      <div class="results-meta" id="results-meta">Chargement des partenaires...</div>
       <div class="card-grid" id="partner-cards" aria-live="polite"></div>
+      <p class="no-results" id="no-results" hidden>Aucun partenaire ne correspond à ces critères.</p>
     </section>
 
     <section class="faq" aria-labelledby="faq-title" id="faq">
       <div class="section-head">
-        <h2 id="faq-title">FAQ / Règles</h2>
-        <p>Les réponses pour éviter les frictions.</p>
+        <div>
+          <h2 id="faq-title">FAQ / Règles</h2>
+          <p>Éligibilité, validation badge/code, données personnelles.</p>
+        </div>
       </div>
       <div class="faq-grid">
         <details open>
-          <summary>Qui peut en bénéficier ?</summary>
-          <p>Tous les salariés disposant du Pass Boréales et d’un badge ou code actif.</p>
+          <summary>Qui peut utiliser le Pass Boréales ?</summary>
+          <p>Accès réservé aux collaborateurs disposant d'un badge actif ou d'un code communiqué par l'équipe CSE.</p>
         </details>
         <details open>
-          <summary>Badge obligatoire ?</summary>
-          <p>Lorsque la fiche indique « badge », présente le badge entreprise. Sinon, un code suffit.</p>
+          <summary>Badge ou code : que présenter ?</summary>
+          <p>Chaque fiche précise « Badge », « Code » ou « Badge ou code ». En cas de doute, présenter les deux informations.</p>
         </details>
         <details>
-          <summary>Codes : où les trouver ?</summary>
-          <p>Chaque fiche partenaire affiche le code ou la marche à suivre. Les codes sensibles expirent automatiquement.</p>
+          <summary>Validité des offres</summary>
+          <p>Les offres sont susceptibles d'évoluer. La date « Dernière mise à jour » est affichée sur la fiche.</p>
         </details>
         <details>
-          <summary>Que faire si un partenaire refuse ?</summary>
-          <p>Écris à Maxime DESIRE (maxime@les-boreales.com). Il contacte le partenaire sous 24h.</p>
+          <summary>Refus d'un partenaire</summary>
+          <p>Utilisez « Signaler un problème » dans la fiche. Le support contacte le partenaire sous 24h.</p>
         </details>
         <details>
-          <summary>Les offres peuvent-elles changer ?</summary>
-          <p>Oui. Les dates de validité sont indiquées. Les fiches sont mises à jour en continu.</p>
+          <summary>Données personnelles</summary>
+          <p>Aucune donnée personnelle n'est transmise aux partenaires. Les codes sont génériques ou temporaires.</p>
         </details>
       </div>
     </section>
 
     <section class="contact" aria-labelledby="contact-title" id="contact">
       <div class="section-head">
-        <h2 id="contact-title">Contact</h2>
-        <p>Ton référent Pass Boréales.</p>
+        <div>
+          <h2 id="contact-title">Contact & support</h2>
+          <p>Référent CSE et canaux officiels.</p>
+        </div>
       </div>
       <div class="card contact-card">
         <div>
-          <p class="eyebrow">Ton contact</p>
-          <h3>Maxime DESIRE — Référent avantages</h3>
-          <p class="lede">Contact principal pour les avantages et les remontées terrain.</p>
+          <p class="eyebrow">Référent</p>
+          <h3>Alexandre Martin — Responsable avantages</h3>
+          <p class="lede">Support aux équipes, mise à jour des offres, contact partenaires.</p>
           <ul class="contact-list">
-            <li>📧 Email : <a class="link" href="mailto:maxime@les-boreales.com">maxime@les-boreales.com</a></li>
-            <li>⏰ Horaires : 9h – 18h (lun–ven)</li>
+            <li>Support : support@pass-boreales.fr</li>
+            <li>Teams : Pass Boréales — Support</li>
+            <li>Horaires : 9h – 18h (lun–ven)</li>
           </ul>
         </div>
-        <a class="cta" href="mailto:maxime@les-boreales.com">Écrire à Maxime</a>
+        <div class="contact-actions">
+          <button class="ghost" id="report-issue">Signaler un problème</button>
+          <button class="cta" id="open-contact">Contacter le support</button>
+        </div>
       </div>
     </section>
   </main>
 
-  <div class="detail-drawer" id="detail-drawer" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+  <footer class="site-footer">
+    <div class="footer-notes">
+      <span>Accès réservé aux collaborateurs.</span>
+      <span>Offres partenaires susceptibles d'évoluer.</span>
+      <span>Aucune donnée personnelle transmise aux partenaires.</span>
+      <span>Support : support@pass-boreales.fr</span>
+    </div>
+  </footer>
+
+  <div class="detail-drawer" id="detail-drawer" role="dialog" aria-modal="true" aria-labelledby="detail-title" tabindex="-1">
     <div class="drawer-content">
       <button class="close" id="close-drawer" aria-label="Fermer">×</button>
       <p class="eyebrow">Fiche partenaire</p>
-      <h3 id="detail-title"></h3>
+      <div class="detail-header">
+        <div>
+          <h3 id="detail-title"></h3>
+          <p class="detail-updated" id="detail-updated"></p>
+          <p class="detail-status" id="detail-status"></p>
+        </div>
+        <div class="detail-tags" id="detail-tags"></div>
+      </div>
       <p class="detail-offer" id="detail-offer"></p>
       <div class="detail-grid">
-        <div>
-          <h4>Comment en profiter</h4>
+        <div class="detail-block">
+          <h4>Comment en bénéficier</h4>
+          <p id="detail-access"></p>
+          <div class="code-block" id="code-block" hidden>
+            <div class="code-line">
+              <span id="code-label">Code d'accès</span>
+              <span id="code-value" aria-live="polite">••••</span>
+            </div>
+            <div class="code-actions">
+              <button class="ghost" type="button" id="show-code">Afficher le code</button>
+              <button class="ghost" type="button" id="copy-code" disabled>Copier</button>
+            </div>
+          </div>
           <p id="detail-how"></p>
+        </div>
+        <div class="detail-block">
           <h4>Adresse</h4>
           <p id="detail-address"></p>
-          <a id="detail-map" class="link" href="#" target="_blank" rel="noreferrer">Ouvrir dans Maps</a>
-        </div>
-        <div>
+          <a id="detail-map" class="link" href="#" target="_blank" rel="noreferrer">Itinéraire</a>
           <h4>Horaires</h4>
           <p id="detail-hours"></p>
-          <h4>Conditions / exclusions</h4>
+          <h4>Conditions</h4>
           <p id="detail-conditions"></p>
-          <h4>Validité</h4>
-          <p id="detail-validity"></p>
-          <p id="detail-tip" class="tip"></p>
         </div>
       </div>
-      <a class="cta" id="report-issue" href="mailto:maxime@les-boreales.com">Écrire à Maxime DESIRE</a>
+      <div class="detail-meta">
+        <p id="detail-group"></p>
+        <p id="detail-support">Support : support@pass-boreales.fr</p>
+      </div>
+      <button class="cta" id="detail-report">Signaler un problème</button>
     </div>
   </div>
 
