@@ -176,10 +176,14 @@ function createAccordion(partner) {
     content.appendChild(hours);
   }
 
-  if (partner.conditions) {
-    const cond = document.createElement("p");
-    cond.className = "muted";
-    cond.textContent = `Conditions : ${partner.conditions}`;
+  if (partner.conditions?.length) {
+    const cond = document.createElement("ul");
+    cond.className = "muted condition-list";
+    partner.conditions.slice(0, 3).forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      cond.appendChild(li);
+    });
     content.appendChild(cond);
   }
 
@@ -266,15 +270,6 @@ async function copyCode(code) {
   }
 }
 
-  document.querySelectorAll(".quick-filter").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const { filter, value } = e.currentTarget.dataset;
-      state.filters = { ...state.filters, category: "", city: "", access: "", tag: "", search: state.filters.search };
-      categorySelect.value = "";
-      citySelect.value = "";
-      accessSelect.value = "";
-      tagSelect.value = "";
-
       if (filter === "city") {
         state.filters.city = value;
         citySelect.value = value;
@@ -331,30 +326,6 @@ function bindFilterEvents() {
     renderPartners();
   });
 
-  document.querySelectorAll(".quick-filter").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const { filter, value } = e.currentTarget.dataset;
-      state.filters = { ...state.filters, category: "", city: "", access: "", tag: "", search: state.filters.search };
-      categorySelect.value = "";
-      citySelect.value = "";
-      accessSelect.value = "";
-      tagSelect.value = "";
-
-      if (filter === "city") {
-        state.filters.city = value;
-        citySelect.value = value;
-      }
-      if (filter === "access") {
-        state.filters.access = value;
-        accessSelect.value = value;
-      }
-      if (filter === "tag") {
-        state.filters.tag = value;
-        tagSelect.value = value;
-      }
-      renderPartners();
-    });
-  });
 }
 
 async function init() {

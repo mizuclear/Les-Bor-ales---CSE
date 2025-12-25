@@ -21,16 +21,16 @@ npm start   # lance un serveur sur http://localhost:3000
    - `category` : ex. "Food & boissons", "Loisirs & sorties"
    - `city` : ville principale (affichée et filtrable)
    - `offer_short` : résumé de l'offre (cartes)
-   - `offer_details` : version détaillée (fiche)
    - `access_type` : `badge` | `code` | `badge_or_code`
    - `code` : valeur du code si applicable (sinon `null`)
-   - `address`, `maps_url`, `hours`, `conditions`
+   - `address_short` : version courte affichée sur la carte
+   - `maps_url` : lien Google Maps (nouvel onglet)
+   - `hours` : horaires d'ouverture
+   - `conditions` : tableau de conditions courtes (2–3 items)
    - `status` : `active` | `test` | `paused`
-   - `tags` : tableau limité à 1–2 tags (ex. "Nouveau", "Exclusif salariés", "En test")
+   - `tags` : 1–2 tags maximum (ex. "Nouveau", "Exclusif salariés")
    - `updated_at` : date ISO (YYYY-MM-DD)
-   - `group_site` : établissement du groupe concerné
-   - `featured` : `true` si l'offre doit apparaître dans « Sélection du mois » (max 3)
-3. Sauvegarder le fichier. La recherche/filtration se base automatiquement sur ces valeurs.
+3. Sauvegarder le fichier. La liste et les filtres se mettent à jour automatiquement (chargement côté client).
 
 ## Déploiement
 - **Netlify** : le dépôt inclut `netlify.toml`. Le site est statique ; commande de build : `npm start` (ou servir directement le dossier `public`).
