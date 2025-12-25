@@ -12,24 +12,6 @@ const noResults = document.getElementById("no-results");
 const infoBar = document.getElementById("info-bar");
 const infoBarText = document.getElementById("info-bar-text");
 
-const detailDrawer = document.getElementById("detail-drawer");
-const detailTitle = document.getElementById("detail-title");
-const detailUpdated = document.getElementById("detail-updated");
-const detailStatus = document.getElementById("detail-status");
-const detailTags = document.getElementById("detail-tags");
-const detailOffer = document.getElementById("detail-offer");
-const detailAccess = document.getElementById("detail-access");
-const detailHow = document.getElementById("detail-how");
-const detailAddress = document.getElementById("detail-address");
-const detailMap = document.getElementById("detail-map");
-const detailHours = document.getElementById("detail-hours");
-const detailConditions = document.getElementById("detail-conditions");
-const detailGroup = document.getElementById("detail-group");
-const codeBlock = document.getElementById("code-block");
-const codeValue = document.getElementById("code-value");
-const showCodeBtn = document.getElementById("show-code");
-const copyCodeBtn = document.getElementById("copy-code");
-
 const toast = document.getElementById("toast");
 
 const state = {
@@ -99,7 +81,7 @@ function createPartnerCard(partner) {
   header.innerHTML = `<p class="eyebrow">${partner.category}</p><h3>${partner.name}</h3>`;
 
   const offer = document.createElement("p");
-  offer.className = "detail-offer";
+  offer.className = "detail-offer clamp-2";
   offer.textContent = partner.offer_short;
 
   const meta = document.createElement("div");
@@ -112,6 +94,10 @@ function createPartnerCard(partner) {
   access.textContent = `Accès : ${accessLabels[partner.access_type] || "—"}`;
   meta.append(city, access);
 
+  const address = document.createElement("p");
+  address.className = "address-line";
+  address.textContent = partner.address_short || partner.address;
+
   const status = document.createElement("span");
   status.className = `pill status ${partner.status}`;
   const statusLabel = partner.status === "active" ? "Actif" : partner.status === "test" ? "En test" : "En pause";
@@ -119,30 +105,97 @@ function createPartnerCard(partner) {
 
   const actions = document.createElement("div");
   actions.className = "actions";
-  const detailBtn = document.createElement("button");
-  detailBtn.className = "cta";
-  detailBtn.textContent = "Voir la fiche";
-  detailBtn.addEventListener("click", () => openDetail(partner));
   const mapBtn = document.createElement("a");
-  mapBtn.className = "ghost";
+  mapBtn.className = "cta";
   mapBtn.href = partner.maps_url;
   mapBtn.target = "_blank";
   mapBtn.rel = "noreferrer";
   mapBtn.textContent = "Itinéraire";
   mapBtn.setAttribute("aria-label", `Itinéraire vers ${partner.name}`);
-  actions.append(detailBtn, mapBtn);
+  actions.append(mapBtn);
 
-  card.append(header, offer, meta, status, actions);
+  const accordion = createAccordion(partner);
 
-  if (partner.status === "paused") {
-    card.classList.add("is-paused");
-    const pauseNote = document.createElement("p");
-    pauseNote.className = "meta";
-    pauseNote.textContent = "Offre temporairement suspendue. Contactez le support pour être prévenu de la reprise.";
-    card.appendChild(pauseNote);
+  card.append(header, offer, meta, status, address, actions, accordion);
+  return card;
+}
+
+function createAccordion(partner) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "accordion";
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "accordion-toggle";
+  toggle.innerHTML = `<span>Détails</span><span aria-hidden="true">▾</span>`;
+
+  const content = document.createElement("div");
+  content.className = "accordion-content";
+  content.hidden = true;
+
+  if (partner.access_type === "code" || partner.code) {
+    const codeBlock = document.createElement("div");
+    codeBlock.className = "code-block";
+
+    const codeLine = document.createElement("div");
+    codeLine.className = "code-line";
+    const codeLabel = document.createElement("span");
+    codeLabel.textContent = "Code d'accès";
+    const codeValueEl = document.createElement("span");
+    codeValueEl.textContent = "••••";
+    codeValueEl.setAttribute("aria-live", "polite");
+    codeLine.append(codeLabel, codeValueEl);
+
+    const codeActions = document.createElement("div");
+    codeActions.className = "code-actions";
+    const showBtn = document.createElement("button");
+    showBtn.type = "button";
+    showBtn.className = "ghost";
+    showBtn.textContent = "Afficher";
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "ghost";
+    copyBtn.textContent = "Copier";
+    copyBtn.disabled = true;
+
+    showBtn.addEventListener("click", () => {
+      codeValueEl.textContent = partner.code ?? "—";
+      copyBtn.disabled = !partner.code;
+    });
+    copyBtn.addEventListener("click", () => copyCode(partner.code));
+
+    codeActions.append(showBtn, copyBtn);
+    codeBlock.append(codeLine, codeActions);
+    content.appendChild(codeBlock);
   }
 
-  return card;
+  if (partner.hours) {
+    const hours = document.createElement("p");
+    hours.className = "muted";
+    hours.textContent = `Horaires : ${partner.hours}`;
+    content.appendChild(hours);
+  }
+
+  if (partner.conditions) {
+    const cond = document.createElement("p");
+    cond.className = "muted";
+    cond.textContent = `Conditions : ${partner.conditions}`;
+    content.appendChild(cond);
+  }
+
+  const updated = document.createElement("p");
+  updated.className = "muted small";
+  updated.textContent = `Mise à jour : ${formatDate(partner.updated_at)}`;
+  content.appendChild(updated);
+
+  toggle.addEventListener("click", () => {
+    const isHidden = content.hidden;
+    content.hidden = !isHidden;
+    toggle.classList.toggle("open", !isHidden);
+  });
+
+  wrapper.append(toggle, content);
+  return wrapper;
 }
 
 function renderFeatured() {
@@ -200,53 +253,11 @@ function renderPartners() {
   filtered.forEach((partner) => partnerCards.appendChild(createPartnerCard(partner)));
 }
 
-function openDetail(partner) {
-  detailTitle.textContent = partner.name;
-  detailOffer.textContent = partner.offer_details || partner.offer_short;
-  detailUpdated.textContent = `Dernière mise à jour : ${formatDate(partner.updated_at)}`;
-  const statusLabel = partner.status === "active" ? "Actif" : partner.status === "test" ? "En test" : "En pause";
-  detailStatus.textContent = `Statut : ${statusLabel}`;
-
-  detailTags.innerHTML = "";
-  partner.tags.slice(0, 2).forEach((tag) => {
-    const badge = document.createElement("span");
-    badge.className = "pill";
-    badge.textContent = tag;
-    detailTags.appendChild(badge);
-  });
-
-  detailAccess.textContent = `Accès : ${accessLabels[partner.access_type] || "—"}`;
-  detailHow.textContent = partner.access_type === "badge" ? "Présentez votre badge en caisse." : partner.access_type === "code" ? "Présentez le code à la caisse ou lors de la réservation." : "Présentez le badge ou le code communiqué.";
-  detailAddress.textContent = partner.address;
-  detailMap.href = partner.maps_url;
-  detailHours.textContent = partner.hours;
-  detailConditions.textContent = partner.conditions;
-  detailGroup.textContent = partner.group_site ? `Établissement : ${partner.group_site}` : "";
-
-  setupCodeBlock(partner);
-
-  detailDrawer.classList.add("active");
-  detailDrawer.focus();
-}
-
-function setupCodeBlock(partner) {
-  if (partner.code) {
-    codeBlock.hidden = false;
-    codeValue.textContent = "••••";
-    copyCodeBtn.disabled = true;
-    showCodeBtn.onclick = () => revealCode(partner.code);
-    copyCodeBtn.onclick = () => copyCode(partner.code);
-  } else {
-    codeBlock.hidden = true;
-  }
-}
-
-function revealCode(code) {
-  codeValue.textContent = code;
-  copyCodeBtn.disabled = false;
-}
-
 async function copyCode(code) {
+  if (!code) {
+    showToast("Aucun code disponible");
+    return;
+  }
   try {
     await navigator.clipboard.writeText(code);
     showToast("Code copié dans le presse-papier");
@@ -255,28 +266,34 @@ async function copyCode(code) {
   }
 }
 
-function closeDetail() {
-  detailDrawer.classList.remove("active");
-}
+  document.querySelectorAll(".quick-filter").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const { filter, value } = e.currentTarget.dataset;
+      state.filters = { ...state.filters, category: "", city: "", access: "", tag: "", search: state.filters.search };
+      categorySelect.value = "";
+      citySelect.value = "";
+      accessSelect.value = "";
+      tagSelect.value = "";
 
-document.getElementById("close-drawer").addEventListener("click", closeDetail);
-detailDrawer.addEventListener("click", (e) => {
-  if (e.target === detailDrawer) closeDetail();
-});
-
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add("visible");
-  setTimeout(() => toast.classList.remove("visible"), 2500);
+      if (filter === "city") {
+        state.filters.city = value;
+        citySelect.value = value;
+      }
+      if (filter === "access") {
+        state.filters.access = value;
+        accessSelect.value = value;
+      }
+      if (filter === "tag") {
+        state.filters.tag = value;
+        tagSelect.value = value;
+      }
+      renderPartners();
+    });
+  });
 }
 
 document.getElementById("report-issue").addEventListener("click", () => showToast("Signalement transmis au support."));
 document.getElementById("open-contact").addEventListener("click", () => showToast("Support contacté (Teams / mail)."));
-document.getElementById("detail-report").addEventListener("click", () => showToast("Signalement transmis au support."));
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && detailDrawer.classList.contains("active")) closeDetail();
-});
 
 function bindFilterEvents() {
   categorySelect.addEventListener("change", (e) => {
