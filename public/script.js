@@ -1,16 +1,18 @@
 const categorySelect = document.getElementById("filter-category");
 const citySelect = document.getElementById("filter-city");
-const tagSelect = document.getElementById("filter-tag");
 const accessSelect = document.getElementById("filter-access");
 const sortSelect = document.getElementById("sort-by");
 const searchInput = document.getElementById("search-input");
 const resetFiltersBtn = document.getElementById("reset-filters");
 const partnerCards = document.getElementById("partner-cards");
-const topCards = document.getElementById("top-cards");
 const resultsMeta = document.getElementById("results-meta");
 const noResults = document.getElementById("no-results");
-const infoBar = document.getElementById("info-bar");
 const infoBarText = document.getElementById("info-bar-text");
+const newsList = document.getElementById("news-list");
+const newsCount = document.getElementById("news-count");
+const summaryActive = document.getElementById("summary-active");
+const summaryTest = document.getElementById("summary-test");
+const summaryCities = document.getElementById("summary-cities");
 
 const toast = document.getElementById("toast");
 
@@ -21,9 +23,9 @@ const state = {
     category: "",
     city: "",
     access: "",
-    tag: "",
     sort: "alphabetical",
   },
+  loading: false,
 };
 
 const accessLabels = {
@@ -33,15 +35,31 @@ const accessLabels = {
 };
 
 async function loadPartners() {
-  const response = await fetch("data/partners.json");
-  if (!response.ok) throw new Error("Impossible de charger les partenaires");
-  const payload = await response.json();
-  return payload.partners || [];
+  const sources = ["./partners.json", "./data/partners.json"];
+  for (const source of sources) {
+    try {
+      const response = await fetch(source);
+      if (!response.ok) continue;
+      const payload = await response.json();
+      return payload.partners || [];
+    } catch (error) {
+      console.error(`Échec de chargement depuis ${source}`, error);
+    }
+  }
+  throw new Error("Impossible de charger les partenaires");
 }
 
 function formatDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleDateString("fr-FR");
+}
+
+function setLoading(isLoading) {
+  state.loading = isLoading;
+  resultsMeta.classList.toggle("muted", isLoading);
+  if (isLoading) {
+    resultsMeta.textContent = "Chargement des partenaires...";
+  }
 }
 
 function setGlobalUpdateDate() {
@@ -202,11 +220,48 @@ function createAccordion(partner) {
   return wrapper;
 }
 
-function renderFeatured() {
-  topCards.innerHTML = "";
-  const featured = state.partners.filter((p) => p.featured && p.status !== "paused").slice(0, 3);
-  if (!featured.length) return;
-  featured.forEach((partner) => topCards.appendChild(createPartnerCard(partner)));
+function renderNews() {
+  newsList.innerHTML = "";
+  const recent = [...state.partners]
+    .filter((partner) => partner.status !== "archived")
+    .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+    .slice(0, 3);
+
+  newsCount.textContent = recent.length;
+
+  if (!recent.length) {
+    const empty = document.createElement("p");
+    empty.className = "muted";
+    empty.textContent = "Aucune offre récente.";
+    newsList.appendChild(empty);
+    return;
+  }
+
+  recent.forEach((partner) => {
+    const item = document.createElement("div");
+    item.className = "news-item";
+    item.innerHTML = `
+      <p class="eyebrow">${partner.category}</p>
+      <p class="news-title">${partner.name}</p>
+      <p class="muted small">MAJ : ${formatDate(partner.updated_at)} • ${partner.city}</p>
+    `;
+    newsList.appendChild(item);
+  });
+}
+
+function renderSummary() {
+  const activeCount = state.partners.filter((p) => p.status === "active").length;
+  const testCount = state.partners.filter((p) => p.status === "test").length;
+  const cities = new Set(state.partners.map((p) => p.city).filter(Boolean));
+
+  summaryActive.textContent = activeCount;
+  summaryTest.textContent = testCount;
+  summaryCities.textContent = cities.size;
+}
+
+function renderInsights() {
+  renderNews();
+  renderSummary();
 }
 
 function sortPartners(a, b, mode) {
@@ -228,14 +283,13 @@ function applyFilters() {
     .filter((partner) => !state.filters.category || partner.category === state.filters.category)
     .filter((partner) => !state.filters.city || partner.city === state.filters.city)
     .filter((partner) => !state.filters.access || partner.access_type === state.filters.access)
-    .filter((partner) => !state.filters.tag || partner.tags.includes(state.filters.tag))
     .filter((partner) => {
       if (!searchTerm) return true;
       const haystack = [
         partner.name,
         partner.category,
         partner.offer_short,
-        partner.offer_details,
+        partner.offer_details || "",
         partner.city,
       ]
         .join(" ")
@@ -270,23 +324,6 @@ async function copyCode(code) {
   }
 }
 
-      if (filter === "city") {
-        state.filters.city = value;
-        citySelect.value = value;
-      }
-      if (filter === "access") {
-        state.filters.access = value;
-        accessSelect.value = value;
-      }
-      if (filter === "tag") {
-        state.filters.tag = value;
-        tagSelect.value = value;
-      }
-      renderPartners();
-    });
-  });
-}
-
 document.getElementById("report-issue").addEventListener("click", () => showToast("Signalement transmis au support."));
 document.getElementById("open-contact").addEventListener("click", () => showToast("Support contacté (Teams / mail)."));
 
@@ -303,10 +340,6 @@ function bindFilterEvents() {
     state.filters.access = e.target.value;
     renderPartners();
   });
-  tagSelect.addEventListener("change", (e) => {
-    state.filters.tag = e.target.value;
-    renderPartners();
-  });
   sortSelect.addEventListener("change", (e) => {
     state.filters.sort = e.target.value;
     renderPartners();
@@ -316,29 +349,37 @@ function bindFilterEvents() {
     renderPartners();
   });
   resetFiltersBtn.addEventListener("click", () => {
-    state.filters = { search: "", category: "", city: "", access: "", tag: "", sort: "alphabetical" };
+    state.filters = { search: "", category: "", city: "", access: "", sort: "alphabetical" };
     categorySelect.value = "";
     citySelect.value = "";
     accessSelect.value = "";
-    tagSelect.value = "";
     sortSelect.value = "alphabetical";
     searchInput.value = "";
     renderPartners();
   });
+}
 
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("visible");
+  setTimeout(() => toast.classList.remove("visible"), 2500);
 }
 
 async function init() {
   try {
+    setLoading(true);
     state.partners = await loadPartners();
     populateFilters();
     setGlobalUpdateDate();
-    renderFeatured();
+    renderInsights();
     renderPartners();
     bindFilterEvents();
   } catch (error) {
     resultsMeta.textContent = "Impossible de charger les partenaires.";
     console.error(error);
+    showToast("Erreur lors du chargement des partenaires.");
+  } finally {
+    setLoading(false);
   }
 }
 

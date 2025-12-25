@@ -34,7 +34,6 @@
       <div class="hero-text">
         <p class="eyebrow">Portail interne</p>
         <h1>Accédez aux avantages partenaires en moins de 10 secondes</h1>
-        <p class="lede">Recherche rapide, filtres clairs, partenaires actualisés.</p>
         <div class="search-panel" role="search">
           <label class="sr-only" for="search-input">Rechercher un partenaire, une catégorie, une offre ou une ville</label>
           <input id="search-input" type="search" placeholder="Rechercher un partenaire, une catégorie, une offre ou une ville" autocomplete="off">
@@ -42,16 +41,40 @@
         </div>
         <a class="link jump-link" href="#partners">Aller à la liste des partenaires ↓</a>
       </div>
-    </section>
-
-    <section class="top-picks" aria-labelledby="top-picks-title" id="selection">
-      <div class="section-head">
-        <div>
-          <h2 id="top-picks-title">Sélection du mois</h2>
-          <p>3 offres à partager en priorité avec les équipes.</p>
+      <aside class="hero-insights" aria-label="Nouveautés et résumé des offres">
+        <div class="card insight-block">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Nouveautés</p>
+              <h3>Dernières offres</h3>
+            </div>
+            <span class="pill muted" id="news-count">0</span>
+          </div>
+          <div class="news-list" id="news-list" aria-live="polite"></div>
         </div>
-      </div>
-      <div class="card-grid" id="top-cards" aria-live="polite"></div>
+        <div class="card insight-block">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Résumé</p>
+              <h3>Vue rapide</h3>
+            </div>
+          </div>
+          <div class="summary-grid" aria-live="polite">
+            <div class="summary-item">
+              <p class="summary-label">Actifs</p>
+              <p class="summary-value" id="summary-active">0</p>
+            </div>
+            <div class="summary-item">
+              <p class="summary-label">En test</p>
+              <p class="summary-value" id="summary-test">0</p>
+            </div>
+            <div class="summary-item">
+              <p class="summary-label">Villes couvertes</p>
+              <p class="summary-value" id="summary-cities">0</p>
+            </div>
+          </div>
+        </div>
+      </aside>
     </section>
 
     <section class="partners" aria-labelledby="partners-title" id="partners">
@@ -81,16 +104,6 @@
             <option value="badge">Badge</option>
             <option value="code">Code</option>
             <option value="badge_or_code">Badge ou code</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="filter-tag">Tag</label>
-          <select id="filter-tag">
-            <option value="">Tous</option>
-            <option value="Nouveau">Nouveau</option>
-            <option value="Exclusif salariés">Exclusif salariés</option>
-            <option value="En test">En test</option>
-            <option value="Mise à jour en cours">Mise à jour en cours</option>
           </select>
         </div>
         <div class="filter-group">
