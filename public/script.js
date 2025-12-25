@@ -312,13 +312,6 @@ function scrollToSection(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
-document.getElementById("propose-form").addEventListener("submit", (e) => {
-  e.preventDefault();
-  showToast("Merci ! Proposition envoyée.");
-  e.target.reset();
-  document.getElementById("propose-feedback").textContent = "Nous revenons vers toi sous 48h.";
-});
-
 document.getElementById("report-issue").addEventListener("click", () => showToast("Signalement envoyé à ton contact."));
 document.getElementById("open-contact").addEventListener("click", () => showToast("Contact ouvert sur Teams / WhatsApp."));
 
