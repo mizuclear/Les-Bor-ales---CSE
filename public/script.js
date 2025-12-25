@@ -1,274 +1,258 @@
-const categories = [
-  "Food & boissons",
-  "Bien-être & beauté",
-  "Loisirs & sorties",
-  "Pratique",
-  "Auto & mobilité",
-  "Sport & santé",
-];
-
-const partners = [
-  {
-    name: "Café des Dunes",
-    offer: "-15% sur toutes les boissons et brunchs",
-    category: "Food & boissons",
-    city: "Villers",
-    tags: ["nouveau", "populaire"],
-    badge: "Badge entreprise",
-    code: null,
-    address: "8 place du Marché, Villers",
-    map: "https://maps.google.com/?q=8+place+du+March%C3%A9+Villers",
-    hours: "Lun–Sam : 8h–19h",
-    conditions: "Hors alcool et menus déjà remisés.",
-    validity: "Valable jusqu'au 30/09, renouvelable",
-    tip: "Astuce : offre spéciale staff sur le latte boréal (+1 croissant offert).",
-    distance: 0.4,
-    topPick: true,
-    discountScore: 15,
-  },
-  {
-    name: "Studio Nordique",
-    offer: "Séance sauna + cryo à 22€ (au lieu de 35€)",
-    category: "Bien-être & beauté",
-    city: "Autres",
-    tags: ["nouveau"],
-    badge: "Badge + code SMS",
-    code: "NORD22",
-    address: "21 rue des Pins, Saint-Cloud",
-    map: "https://maps.google.com/?q=21+rue+des+Pins+Saint-Cloud",
-    hours: "Mar–Dim : 10h–21h",
-    conditions: "Réservation obligatoire, 1 fois/semaine.",
-    validity: "Test 1 mois renouvelable",
-    tip: "Offre spéciale staff : upgrade serviette chaude offerte.",
-    distance: 12,
-    topPick: true,
-    discountScore: 37,
-  },
-  {
-    name: "Cinéma Polaris",
-    offer: "Place à 7€ + pop-corn offert",
-    category: "Loisirs & sorties",
-    city: "Villers",
-    tags: ["populaire"],
-    badge: null,
-    code: "POLARIS7",
-    address: "2 avenue des Arts, Villers",
-    map: "https://maps.google.com/?q=2+avenue+des+Arts+Villers",
-    hours: "Tous les jours : 11h–23h",
-    conditions: "Hors avant-premières et séances 3D.",
-    validity: "Valable 7/7, renouvelé mensuellement",
-    tip: "Astuce : demande la salle 2 (sièges inclinables).",
-    distance: 0.9,
-    topPick: true,
-    discountScore: 30,
-  },
-  {
-    name: "Laverie Flash",
-    offer: "10€ le cycle complet pressing",
-    category: "Pratique",
-    city: "Villers",
-    tags: ["populaire"],
-    badge: "Badge",
-    code: null,
-    address: "34 rue des Lilas, Villers",
-    map: "https://maps.google.com/?q=34+rue+des+Lilas+Villers",
-    hours: "Lun–Dim : 7h–22h",
-    conditions: "Hors pièces spéciales (cuir, rideaux).",
-    validity: "Valable toute l'année",
-    tip: "Astuce : créneau calme entre 14h et 16h.",
-    distance: 0.7,
-    topPick: false,
-    discountScore: 18,
-  },
-  {
-    name: "Garage Arctique",
-    offer: "Révision complète -20%",
-    category: "Auto & mobilité",
-    city: "Autres",
-    tags: [],
-    badge: "Badge ou carte grise pro",
-    code: null,
-    address: "119 route du Nord, Calais",
-    map: "https://maps.google.com/?q=119+route+du+Nord+Calais",
-    hours: "Lun–Ven : 8h–18h",
-    conditions: "Sur rendez-vous uniquement.",
-    validity: "Valable jusqu'au 31/12",
-    tip: "Offre spéciale staff : véhicule de courtoisie offert.",
-    distance: 28,
-    topPick: false,
-    discountScore: 20,
-  },
-  {
-    name: "Salle Fjord",
-    offer: "Abonnement mensuel -25% + séance découverte gratuite",
-    category: "Sport & santé",
-    city: "Villers",
-    tags: ["nouveau", "populaire"],
-    badge: null,
-    code: "FJORD25",
-    address: "5 boulevard des Aurores, Villers",
-    map: "https://maps.google.com/?q=5+bvd+des+Aurores+Villers",
-    hours: "Tous les jours : 6h–23h",
-    conditions: "Engagement 3 mois minimum.",
-    validity: "Valable jusqu'au 31/10",
-    tip: "Astuce : cours HIIT mardi 7h réservé aux salariés.",
-    distance: 1.4,
-    topPick: true,
-    discountScore: 45,
-  },
-  {
-    name: "Coiffure Aurora",
-    offer: "Shampoing + coupe + soin à 29€",
-    category: "Bien-être & beauté",
-    city: "Villers",
-    tags: [],
-    badge: "Badge",
-    code: null,
-    address: "17 rue des Peupliers, Villers",
-    map: "https://maps.google.com/?q=17+rue+des+Peupliers+Villers",
-    hours: "Mar–Sam : 9h–19h",
-    conditions: "Supplément cheveux longs (+6€).",
-    validity: "Valable 7/7",
-    tip: "Astuce : prends la carte fidélité, cumulable.",
-    distance: 1.2,
-    topPick: false,
-    discountScore: 22,
-  },
-];
-
 const categorySelect = document.getElementById("filter-category");
 const citySelect = document.getElementById("filter-city");
 const tagSelect = document.getElementById("filter-tag");
+const accessSelect = document.getElementById("filter-access");
 const sortSelect = document.getElementById("sort-by");
+const searchInput = document.getElementById("search-input");
+const resetFiltersBtn = document.getElementById("reset-filters");
 const partnerCards = document.getElementById("partner-cards");
 const topCards = document.getElementById("top-cards");
+const resultsMeta = document.getElementById("results-meta");
+const noResults = document.getElementById("no-results");
+const infoBar = document.getElementById("info-bar");
+const infoBarText = document.getElementById("info-bar-text");
+
 const detailDrawer = document.getElementById("detail-drawer");
 const detailTitle = document.getElementById("detail-title");
+const detailUpdated = document.getElementById("detail-updated");
+const detailStatus = document.getElementById("detail-status");
+const detailTags = document.getElementById("detail-tags");
 const detailOffer = document.getElementById("detail-offer");
+const detailAccess = document.getElementById("detail-access");
 const detailHow = document.getElementById("detail-how");
 const detailAddress = document.getElementById("detail-address");
 const detailMap = document.getElementById("detail-map");
 const detailHours = document.getElementById("detail-hours");
 const detailConditions = document.getElementById("detail-conditions");
-const detailValidity = document.getElementById("detail-validity");
-const detailTip = document.getElementById("detail-tip");
+const detailGroup = document.getElementById("detail-group");
+const codeBlock = document.getElementById("code-block");
+const codeValue = document.getElementById("code-value");
+const showCodeBtn = document.getElementById("show-code");
+const copyCodeBtn = document.getElementById("copy-code");
+
 const toast = document.getElementById("toast");
 
-let selectedCategory = "";
+const state = {
+  partners: [],
+  filters: {
+    search: "",
+    category: "",
+    city: "",
+    access: "",
+    tag: "",
+    sort: "alphabetical",
+  },
+};
 
-function initCategories() {
-  categories.forEach((cat) => {
+const accessLabels = {
+  badge: "Badge",
+  code: "Code",
+  badge_or_code: "Badge ou code",
+};
+
+async function loadPartners() {
+  const response = await fetch("data/partners.json");
+  if (!response.ok) throw new Error("Impossible de charger les partenaires");
+  const payload = await response.json();
+  return payload.partners || [];
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("fr-FR");
+}
+
+function setGlobalUpdateDate() {
+  if (!state.partners.length) return;
+  const latest = state.partners.reduce((acc, partner) => {
+    const current = new Date(partner.updated_at);
+    return current > acc ? current : acc;
+  }, new Date(0));
+  const dateText = latest.toLocaleDateString("fr-FR");
+  infoBarText.textContent = `🔒 Accès réservé aux collaborateurs • MAJ : ${dateText}`;
+}
+
+function uniqueValues(partners, key) {
+  return Array.from(new Set(partners.map((p) => p[key]).filter(Boolean))).sort((a, b) => a.localeCompare(b, "fr"));
+}
+
+function populateFilters() {
+  uniqueValues(state.partners, "category").forEach((category) => {
     const option = document.createElement("option");
-    option.value = cat;
-    option.textContent = cat;
+    option.value = category;
+    option.textContent = category;
     categorySelect.appendChild(option);
+  });
+
+  uniqueValues(state.partners, "city").forEach((city) => {
+    const option = document.createElement("option");
+    option.value = city;
+    option.textContent = city;
+    citySelect.appendChild(option);
   });
 }
 
-function renderTopPicks() {
-  topCards.innerHTML = "";
-  partners
-    .filter((p) => p.topPick)
-    .slice(0, 6)
-    .forEach((partner) => {
-      const card = createPartnerCard(partner, true);
-      topCards.appendChild(card);
-    });
-}
-
-function createPartnerCard(partner, compact = false) {
+function createPartnerCard(partner) {
   const card = document.createElement("article");
   card.className = "card";
   const header = document.createElement("div");
-  header.className = "card-header";
   header.innerHTML = `<p class="eyebrow">${partner.category}</p><h3>${partner.name}</h3>`;
 
   const offer = document.createElement("p");
-  offer.textContent = partner.offer;
+  offer.className = "detail-offer";
+  offer.textContent = partner.offer_short;
 
-  const chips = document.createElement("div");
-  chips.className = "chips";
-  const chipData = [
-    partner.city === "Villers" ? "Villers" : "Autres villes",
-    partner.badge ? "Badge" : "Code",
-    ...partner.tags,
-  ];
-  chipData.forEach((c) => {
-    const span = document.createElement("span");
-    span.className = "chip";
-    span.textContent = c;
-    chips.appendChild(span);
-  });
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  const city = document.createElement("span");
+  city.className = "tag";
+  city.textContent = partner.city;
+  const access = document.createElement("span");
+  access.className = "tag";
+  access.textContent = `Accès : ${accessLabels[partner.access_type] || "—"}`;
+  meta.append(city, access);
+
+  const status = document.createElement("span");
+  status.className = `pill status ${partner.status}`;
+  const statusLabel = partner.status === "active" ? "Actif" : partner.status === "test" ? "En test" : "En pause";
+  status.textContent = statusLabel;
 
   const actions = document.createElement("div");
   actions.className = "actions";
   const detailBtn = document.createElement("button");
-  detailBtn.className = "ghost";
+  detailBtn.className = "cta";
   detailBtn.textContent = "Voir la fiche";
   detailBtn.addEventListener("click", () => openDetail(partner));
   const mapBtn = document.createElement("a");
-  mapBtn.className = "cta";
-  mapBtn.href = partner.map;
+  mapBtn.className = "ghost";
+  mapBtn.href = partner.maps_url;
   mapBtn.target = "_blank";
   mapBtn.rel = "noreferrer";
   mapBtn.textContent = "Itinéraire";
+  mapBtn.setAttribute("aria-label", `Itinéraire vers ${partner.name}`);
   actions.append(detailBtn, mapBtn);
 
-  card.append(header, offer, chips);
-  if (!compact) {
-    const mini = document.createElement("p");
-    mini.textContent = `Badge / code : ${partner.badge ?? partner.code}`;
-    card.append(mini);
+  card.append(header, offer, meta, status, actions);
+
+  if (partner.status === "paused") {
+    card.classList.add("is-paused");
+    const pauseNote = document.createElement("p");
+    pauseNote.className = "meta";
+    pauseNote.textContent = "Offre temporairement suspendue. Contactez le support pour être prévenu de la reprise.";
+    card.appendChild(pauseNote);
   }
-  card.append(actions);
+
   return card;
 }
 
-function renderPartners() {
-  const filtered = partners
-    .filter((p) => !selectedCategory || p.category === selectedCategory)
-    .filter((p) => {
-      if (citySelect.value === "Villers") return p.city === "Villers";
-      if (citySelect.value === "Autres") return p.city !== "Villers";
-      return true;
-    })
-    .filter((p) => {
-      if (tagSelect.value === "nouveau") return p.tags.includes("nouveau");
-      if (tagSelect.value === "populaire") return p.tags.includes("populaire");
-      return true;
-    })
-    .sort((a, b) => sortPartners(a, b, sortSelect.value));
-
-  partnerCards.innerHTML = "";
-  filtered.forEach((partner) => partnerCards.appendChild(createPartnerCard(partner)));
+function renderFeatured() {
+  topCards.innerHTML = "";
+  const featured = state.partners.filter((p) => p.featured && p.status !== "paused").slice(0, 3);
+  if (!featured.length) return;
+  featured.forEach((partner) => topCards.appendChild(createPartnerCard(partner)));
 }
 
 function sortPartners(a, b, mode) {
-  switch (mode) {
-    case "nouveaux":
-      return (b.tags.includes("nouveau") ? 1 : 0) - (a.tags.includes("nouveau") ? 1 : 0);
-    case "proches":
-      return a.distance - b.distance;
-    case "remise":
-      return b.discountScore - a.discountScore;
-    default:
-      return a.name.localeCompare(b.name, "fr");
+  if (mode === "recent") {
+    return new Date(b.updated_at) - new Date(a.updated_at);
   }
+  if (mode === "status") {
+    const order = { active: 0, test: 1, paused: 2 };
+    return (order[a.status] ?? 3) - (order[b.status] ?? 3);
+  }
+  return a.name.localeCompare(b.name, "fr");
+}
+
+function applyFilters() {
+  const searchTerm = state.filters.search.toLowerCase();
+
+  return state.partners
+    .filter((partner) => partner.status !== "archived")
+    .filter((partner) => !state.filters.category || partner.category === state.filters.category)
+    .filter((partner) => !state.filters.city || partner.city === state.filters.city)
+    .filter((partner) => !state.filters.access || partner.access_type === state.filters.access)
+    .filter((partner) => !state.filters.tag || partner.tags.includes(state.filters.tag))
+    .filter((partner) => {
+      if (!searchTerm) return true;
+      const haystack = [
+        partner.name,
+        partner.category,
+        partner.offer_short,
+        partner.offer_details,
+        partner.city,
+      ]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(searchTerm);
+    })
+    .sort((a, b) => sortPartners(a, b, state.filters.sort));
+}
+
+function renderPartners() {
+  const filtered = applyFilters();
+  partnerCards.innerHTML = "";
+  resultsMeta.textContent = `${filtered.length} partenaire(s)`;
+  if (!filtered.length) {
+    noResults.hidden = false;
+    return;
+  }
+  noResults.hidden = true;
+  filtered.forEach((partner) => partnerCards.appendChild(createPartnerCard(partner)));
 }
 
 function openDetail(partner) {
   detailTitle.textContent = partner.name;
-  detailOffer.textContent = partner.offer;
-  const howLines = [partner.badge ? `Présente : ${partner.badge}` : "Code requis", partner.code ? `Code : ${partner.code}` : "Pas de code nécessaire"];
-  detailHow.textContent = howLines.join(" · ");
+  detailOffer.textContent = partner.offer_details || partner.offer_short;
+  detailUpdated.textContent = `Dernière mise à jour : ${formatDate(partner.updated_at)}`;
+  const statusLabel = partner.status === "active" ? "Actif" : partner.status === "test" ? "En test" : "En pause";
+  detailStatus.textContent = `Statut : ${statusLabel}`;
+
+  detailTags.innerHTML = "";
+  partner.tags.slice(0, 2).forEach((tag) => {
+    const badge = document.createElement("span");
+    badge.className = "pill";
+    badge.textContent = tag;
+    detailTags.appendChild(badge);
+  });
+
+  detailAccess.textContent = `Accès : ${accessLabels[partner.access_type] || "—"}`;
+  detailHow.textContent = partner.access_type === "badge" ? "Présentez votre badge en caisse." : partner.access_type === "code" ? "Présentez le code à la caisse ou lors de la réservation." : "Présentez le badge ou le code communiqué.";
   detailAddress.textContent = partner.address;
-  detailMap.href = partner.map;
+  detailMap.href = partner.maps_url;
   detailHours.textContent = partner.hours;
   detailConditions.textContent = partner.conditions;
-  detailValidity.textContent = partner.validity;
-  detailTip.textContent = partner.tip || "";
+  detailGroup.textContent = partner.group_site ? `Établissement : ${partner.group_site}` : "";
+
+  setupCodeBlock(partner);
+
   detailDrawer.classList.add("active");
   detailDrawer.focus();
+}
+
+function setupCodeBlock(partner) {
+  if (partner.code) {
+    codeBlock.hidden = false;
+    codeValue.textContent = "••••";
+    copyCodeBtn.disabled = true;
+    showCodeBtn.onclick = () => revealCode(partner.code);
+    copyCodeBtn.onclick = () => copyCode(partner.code);
+  } else {
+    codeBlock.hidden = true;
+  }
+}
+
+function revealCode(code) {
+  codeValue.textContent = code;
+  copyCodeBtn.disabled = false;
+}
+
+async function copyCode(code) {
+  try {
+    await navigator.clipboard.writeText(code);
+    showToast("Code copié dans le presse-papier");
+  } catch (error) {
+    showToast("Copie impossible dans ce navigateur");
+  }
 }
 
 function closeDetail() {
@@ -280,41 +264,94 @@ detailDrawer.addEventListener("click", (e) => {
   if (e.target === detailDrawer) closeDetail();
 });
 
-categorySelect.addEventListener("change", (e) => {
-  selectedCategory = e.target.value;
-  renderPartners();
-});
-citySelect.addEventListener("change", renderPartners);
-tagSelect.addEventListener("change", renderPartners);
-sortSelect.addEventListener("change", renderPartners);
-
-document.getElementById("scroll-top").addEventListener("click", () => scrollToSection("top"));
-
-function scrollToSection(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-}
-
-document.getElementById("report-issue").addEventListener("click", () => showToast("Signalement envoyé à ton contact."));
-document.getElementById("open-contact").addEventListener("click", () => showToast("Contact ouvert sur Teams / WhatsApp."));
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && detailDrawer.classList.contains("active")) closeDetail();
-});
-
-document.getElementById("contact").addEventListener("click", (e) => {
-  if (e.target.closest("button")) return;
-});
-
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("visible");
   setTimeout(() => toast.classList.remove("visible"), 2500);
 }
 
-function populateFilterDefaults() {
-  initCategories();
-  renderTopPicks();
-  renderPartners();
+document.getElementById("report-issue").addEventListener("click", () => showToast("Signalement transmis au support."));
+document.getElementById("open-contact").addEventListener("click", () => showToast("Support contacté (Teams / mail)."));
+document.getElementById("detail-report").addEventListener("click", () => showToast("Signalement transmis au support."));
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && detailDrawer.classList.contains("active")) closeDetail();
+});
+
+function bindFilterEvents() {
+  categorySelect.addEventListener("change", (e) => {
+    state.filters.category = e.target.value;
+    renderPartners();
+  });
+  citySelect.addEventListener("change", (e) => {
+    state.filters.city = e.target.value;
+    renderPartners();
+  });
+  accessSelect.addEventListener("change", (e) => {
+    state.filters.access = e.target.value;
+    renderPartners();
+  });
+  tagSelect.addEventListener("change", (e) => {
+    state.filters.tag = e.target.value;
+    renderPartners();
+  });
+  sortSelect.addEventListener("change", (e) => {
+    state.filters.sort = e.target.value;
+    renderPartners();
+  });
+  searchInput.addEventListener("input", (e) => {
+    state.filters.search = e.target.value.trim();
+    renderPartners();
+  });
+  resetFiltersBtn.addEventListener("click", () => {
+    state.filters = { search: "", category: "", city: "", access: "", tag: "", sort: "alphabetical" };
+    categorySelect.value = "";
+    citySelect.value = "";
+    accessSelect.value = "";
+    tagSelect.value = "";
+    sortSelect.value = "alphabetical";
+    searchInput.value = "";
+    renderPartners();
+  });
+
+  document.querySelectorAll(".quick-filter").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const { filter, value } = e.currentTarget.dataset;
+      state.filters = { ...state.filters, category: "", city: "", access: "", tag: "", search: state.filters.search };
+      categorySelect.value = "";
+      citySelect.value = "";
+      accessSelect.value = "";
+      tagSelect.value = "";
+
+      if (filter === "city") {
+        state.filters.city = value;
+        citySelect.value = value;
+      }
+      if (filter === "access") {
+        state.filters.access = value;
+        accessSelect.value = value;
+      }
+      if (filter === "tag") {
+        state.filters.tag = value;
+        tagSelect.value = value;
+      }
+      renderPartners();
+    });
+  });
 }
 
-populateFilterDefaults();
+async function init() {
+  try {
+    state.partners = await loadPartners();
+    populateFilters();
+    setGlobalUpdateDate();
+    renderFeatured();
+    renderPartners();
+    bindFilterEvents();
+  } catch (error) {
+    resultsMeta.textContent = "Impossible de charger les partenaires.";
+    console.error(error);
+  }
+}
+
+init();
