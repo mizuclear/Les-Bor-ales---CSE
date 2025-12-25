@@ -1,0 +1,16 @@
+{
+  "name": "les-bor-ales-cse",
+  "version": "1.0.0",
+  "description": "A Node.js project for Les Bor-ales - CSE",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {}
+}
