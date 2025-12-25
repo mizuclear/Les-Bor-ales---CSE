@@ -152,7 +152,6 @@ const detailHours = document.getElementById("detail-hours");
 const detailConditions = document.getElementById("detail-conditions");
 const detailValidity = document.getElementById("detail-validity");
 const detailTip = document.getElementById("detail-tip");
-const toast = document.getElementById("toast");
 
 let selectedCategory = "";
 
@@ -294,9 +293,6 @@ function scrollToSection(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
-document.getElementById("report-issue").addEventListener("click", () => showToast("Signalement envoyé à ton contact."));
-document.getElementById("open-contact").addEventListener("click", () => showToast("Contact ouvert sur Teams / WhatsApp."));
-
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && detailDrawer.classList.contains("active")) closeDetail();
 });
@@ -304,12 +300,6 @@ document.addEventListener("keydown", (e) => {
 document.getElementById("contact").addEventListener("click", (e) => {
   if (e.target.closest("button")) return;
 });
-
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add("visible");
-  setTimeout(() => toast.classList.remove("visible"), 2500);
-}
 
 function populateFilterDefaults() {
   initCategories();
