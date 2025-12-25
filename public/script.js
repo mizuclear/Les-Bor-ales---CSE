@@ -142,7 +142,6 @@ const tagSelect = document.getElementById("filter-tag");
 const sortSelect = document.getElementById("sort-by");
 const partnerCards = document.getElementById("partner-cards");
 const topCards = document.getElementById("top-cards");
-const categoryButtons = document.getElementById("category-buttons");
 const detailDrawer = document.getElementById("detail-drawer");
 const detailTitle = document.getElementById("detail-title");
 const detailOffer = document.getElementById("detail-offer");
@@ -281,22 +280,8 @@ detailDrawer.addEventListener("click", (e) => {
   if (e.target === detailDrawer) closeDetail();
 });
 
-function attachCategoryButtons() {
-  categoryButtons.querySelectorAll("button").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      selectedCategory = btn.dataset.category;
-      categoryButtons.querySelectorAll("button").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      categorySelect.value = selectedCategory;
-      renderPartners();
-      scrollToSection("partners");
-    });
-  });
-}
-
 categorySelect.addEventListener("change", (e) => {
   selectedCategory = e.target.value;
-  categoryButtons.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.category === selectedCategory));
   renderPartners();
 });
 citySelect.addEventListener("change", renderPartners);
@@ -304,7 +289,6 @@ tagSelect.addEventListener("change", renderPartners);
 sortSelect.addEventListener("change", renderPartners);
 
 document.getElementById("scroll-top").addEventListener("click", () => scrollToSection("top"));
-document.getElementById("scroll-how").addEventListener("click", () => scrollToSection("how"));
 
 function scrollToSection(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -333,5 +317,4 @@ function populateFilterDefaults() {
   renderPartners();
 }
 
-attachCategoryButtons();
 populateFilterDefaults();
