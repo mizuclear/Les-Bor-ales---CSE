@@ -14,16 +14,20 @@
   <header class="site-header">
     <div class="brand">
       <img class="brand-logo" src="https://i.ibb.co/rRW5rKmZ/logo-removebg-preview.png" alt="Logo Les Boréales" loading="lazy">
-      <div>
-        <p class="eyebrow">Portail Avantages Salariés</p>
-        <p class="brand-name">Pass Boréales</p>
+      <div class="brand-text">
+        <p class="eyebrow">Pass Boréales</p>
+        <p class="brand-name">Portail interne</p>
       </div>
     </div>
     <div class="header-meta">
-      <p class="pill muted">Accès réservé aux collaborateurs</p>
-      <p class="updated" id="global-updated">Mises à jour en cours...</p>
+      <p class="pill muted" aria-label="Portail interne">🔒 Interne</p>
+      <button class="ghost header-menu" aria-label="Ouvrir le menu" type="button">☰</button>
     </div>
   </header>
+
+  <div class="info-bar" id="info-bar" aria-live="polite">
+    <span class="info-text" id="info-bar-text">🔒 Accès réservé aux collaborateurs • MAJ : —</span>
+  </div>
 
   <main>
     <section class="hero" id="home">
@@ -36,11 +40,26 @@
           <input id="search-input" type="search" placeholder="Rechercher un partenaire, une catégorie, une offre ou une ville" autocomplete="off">
           <button class="ghost" id="reset-filters" type="button">Réinitialiser</button>
         </div>
+        <a class="link jump-link" href="#partners">Aller à la liste des partenaires ↓</a>
+        <div class="quick-filters" aria-label="Filtres rapides">
+          <button class="pill quick-filter" data-filter="city" data-value="Villers-sur-Mer">Villers-sur-Mer</button>
+          <button class="pill quick-filter" data-filter="access" data-value="badge">Accès badge</button>
+          <button class="pill quick-filter" data-filter="access" data-value="code">Accès code</button>
+          <button class="pill quick-filter" data-filter="tag" data-value="Nouveau">Nouveaux</button>
+        </div>
         <div class="info-pills">
-          <span class="pill">Accès réservé aux collaborateurs</span>
           <span class="pill">Support : support@pass-boreales.fr</span>
           <span class="pill">Offres partenaires susceptibles d'évoluer</span>
         </div>
+      </div>
+      <div class="hero-card" aria-label="Règles d'usage">
+        <h3>Règles clés</h3>
+        <ul class="rules">
+          <li>Badge ou code selon la fiche partenaire (indiqué clairement).</li>
+          <li>Dernière mise à jour affichée sur chaque fiche.</li>
+          <li>Signalement en 1 clic vers le support.</li>
+          <li>Aucune donnée personnelle transmise aux partenaires.</li>
+        </ul>
       </div>
       <div class="hero-card" aria-label="Règles d'usage">
         <h3>Règles clés</h3>

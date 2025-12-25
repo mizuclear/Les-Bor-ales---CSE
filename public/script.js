@@ -9,7 +9,8 @@ const partnerCards = document.getElementById("partner-cards");
 const topCards = document.getElementById("top-cards");
 const resultsMeta = document.getElementById("results-meta");
 const noResults = document.getElementById("no-results");
-const globalUpdated = document.getElementById("global-updated");
+const infoBar = document.getElementById("info-bar");
+const infoBarText = document.getElementById("info-bar-text");
 
 const detailDrawer = document.getElementById("detail-drawer");
 const detailTitle = document.getElementById("detail-title");
@@ -67,7 +68,8 @@ function setGlobalUpdateDate() {
     const current = new Date(partner.updated_at);
     return current > acc ? current : acc;
   }, new Date(0));
-  globalUpdated.textContent = `Dernière mise à jour : ${latest.toLocaleDateString("fr-FR")}`;
+  const dateText = latest.toLocaleDateString("fr-FR");
+  infoBarText.textContent = `🔒 Accès réservé aux collaborateurs • MAJ : ${dateText}`;
 }
 
 function uniqueValues(partners, key) {
@@ -107,35 +109,22 @@ function createPartnerCard(partner) {
   city.textContent = partner.city;
   const access = document.createElement("span");
   access.className = "tag";
-  access.textContent = accessLabels[partner.access_type] || "Accès";
+  access.textContent = `Accès : ${accessLabels[partner.access_type] || "—"}`;
   meta.append(city, access);
 
-  const status = document.createElement("p");
-  status.className = `status ${partner.status}`;
+  const status = document.createElement("span");
+  status.className = `pill status ${partner.status}`;
   const statusLabel = partner.status === "active" ? "Actif" : partner.status === "test" ? "En test" : "En pause";
   status.textContent = statusLabel;
-
-  const update = document.createElement("p");
-  update.className = "meta";
-  update.textContent = `Dernière mise à jour : ${formatDate(partner.updated_at)}`;
-
-  const tags = document.createElement("div");
-  tags.className = "meta";
-  partner.tags.slice(0, 2).forEach((tag) => {
-    const badge = document.createElement("span");
-    badge.className = "pill";
-    badge.textContent = tag;
-    tags.appendChild(badge);
-  });
 
   const actions = document.createElement("div");
   actions.className = "actions";
   const detailBtn = document.createElement("button");
-  detailBtn.className = "ghost";
+  detailBtn.className = "cta";
   detailBtn.textContent = "Voir la fiche";
   detailBtn.addEventListener("click", () => openDetail(partner));
   const mapBtn = document.createElement("a");
-  mapBtn.className = "cta";
+  mapBtn.className = "ghost";
   mapBtn.href = partner.maps_url;
   mapBtn.target = "_blank";
   mapBtn.rel = "noreferrer";
@@ -143,7 +132,7 @@ function createPartnerCard(partner) {
   mapBtn.setAttribute("aria-label", `Itinéraire vers ${partner.name}`);
   actions.append(detailBtn, mapBtn);
 
-  card.append(header, offer, meta, status, update, tags, actions);
+  card.append(header, offer, meta, status, actions);
 
   if (partner.status === "paused") {
     card.classList.add("is-paused");
@@ -323,6 +312,31 @@ function bindFilterEvents() {
     sortSelect.value = "alphabetical";
     searchInput.value = "";
     renderPartners();
+  });
+
+  document.querySelectorAll(".quick-filter").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const { filter, value } = e.currentTarget.dataset;
+      state.filters = { ...state.filters, category: "", city: "", access: "", tag: "", search: state.filters.search };
+      categorySelect.value = "";
+      citySelect.value = "";
+      accessSelect.value = "";
+      tagSelect.value = "";
+
+      if (filter === "city") {
+        state.filters.city = value;
+        citySelect.value = value;
+      }
+      if (filter === "access") {
+        state.filters.access = value;
+        accessSelect.value = value;
+      }
+      if (filter === "tag") {
+        state.filters.tag = value;
+        tagSelect.value = value;
+      }
+      renderPartners();
+    });
   });
 }
 

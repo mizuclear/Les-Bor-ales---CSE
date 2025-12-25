@@ -38,19 +38,21 @@ main {
   background: rgba(255, 255, 255, 0.95);
   border-bottom: 1px solid var(--border);
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
-  padding: 0.75rem clamp(1rem, 4vw, 2.5rem);
+  padding: 0.6rem clamp(1rem, 4vw, 2.5rem);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   backdrop-filter: blur(8px);
+  min-height: 64px;
 }
 
 .brand { display: flex; gap: 0.75rem; align-items: center; }
 .brand-logo { width: 110px; height: auto; object-fit: contain; }
+.brand-text { display: grid; gap: 0.1rem; }
 .brand-name { margin: 0; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-.header-meta { display: grid; gap: 0.25rem; justify-items: end; text-align: right; }
-.updated { margin: 0; color: var(--muted); font-weight: 600; }
+.header-meta { display: flex; gap: 0.5rem; align-items: center; }
+.header-menu { display: none; padding: 0.4rem 0.7rem; }
 
 .eyebrow { margin: 0; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-size: 0.85rem; font-weight: 700; }
 .lede { color: var(--muted); margin: 0; }
@@ -86,6 +88,9 @@ main {
   font-size: 1rem;
   box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.03);
 }
+
+.jump-link { font-weight: 700; }
+.quick-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
 button, select {
   font-family: inherit;
@@ -125,6 +130,10 @@ button, select {
   gap: 0.35rem;
 }
 .pill.muted { background: #eef1f7; color: var(--muted); border-color: var(--border); }
+.pill.status { background: #eef1f7; color: var(--text); border-color: var(--border); }
+.pill.status.active { color: var(--success); border-color: rgba(15, 157, 88, 0.4); }
+.pill.status.test { color: var(--warning); border-color: rgba(180, 83, 9, 0.4); }
+.pill.status.paused { color: #b91c1c; border-color: rgba(185, 28, 28, 0.4); }
 .info-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
 .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
@@ -170,8 +179,12 @@ button, select {
 .no-results { margin: 0.75rem 0; color: var(--muted); font-weight: 600; }
 
 .faq-grid { display: grid; gap: 0.75rem; }
-.faq-grid details { background: var(--panel); border-radius: var(--radius); padding: 0.9rem 1.1rem; border: 1px solid var(--border); box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06); }
-.faq-grid summary { font-weight: 700; cursor: pointer; }
+.faq-grid details { background: var(--panel); border-radius: var(--radius); padding: 0.9rem 1.1rem; border: 1px solid var(--border); box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06); transition: border-color 0.2s ease, background 0.2s ease; }
+.faq-grid details[open] { border-left: 4px solid var(--accent); background: #f8fafc; }
+.faq-grid summary { font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; }
+.faq-grid summary::after { content: "▾"; margin-left: auto; color: var(--muted); transition: transform 0.2s ease; }
+.faq-grid details[open] summary::after { transform: rotate(-180deg); }
+.faq-grid summary:focus-visible { outline: 2px solid var(--accent); border-radius: var(--radius-sm); }
 
 .contact-card { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
 .contact-list { padding-left: 1.1rem; margin: 0.35rem 0 0; color: var(--muted); display: grid; gap: 0.25rem; }
@@ -220,9 +233,31 @@ button, select {
 @media (max-width: 960px) {
   .hero { grid-template-columns: 1fr; }
   .header-meta { justify-items: start; text-align: left; }
+  .brand-text .eyebrow { font-size: 0.95rem; }
 }
 
 @media (max-width: 640px) {
   main { padding: 1rem 1rem 2.5rem; }
   .card-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .site-header {
+    padding: 0.5rem 1rem;
+    min-height: 56px;
+  }
+  .brand-logo { width: 72px; }
+  .brand-text .eyebrow { font-size: 0.85rem; }
+  .brand-name { display: none; }
+  .header-meta { gap: 0.35rem; }
+  .header-menu { display: inline-flex; }
+  .info-bar { padding: 0.35rem 1rem; font-size: 0.9rem; }
+  .card .actions { flex-direction: column; }
+  .card .actions .cta, .card .actions .ghost { width: 100%; justify-content: center; }
 }
+.info-bar {
+  background: #eef1f7;
+  color: var(--muted);
+  padding: 0.35rem clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--border);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.info-text { display: block; }
