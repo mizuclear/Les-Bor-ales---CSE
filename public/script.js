@@ -270,10 +270,21 @@ async function copyCode(code) {
   }
 }
 
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add("visible");
-  setTimeout(() => toast.classList.remove("visible"), 2500);
+      if (filter === "city") {
+        state.filters.city = value;
+        citySelect.value = value;
+      }
+      if (filter === "access") {
+        state.filters.access = value;
+        accessSelect.value = value;
+      }
+      if (filter === "tag") {
+        state.filters.tag = value;
+        tagSelect.value = value;
+      }
+      renderPartners();
+    });
+  });
 }
 
 document.getElementById("report-issue").addEventListener("click", () => showToast("Signalement transmis au support."));
