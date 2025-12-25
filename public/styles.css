@@ -51,7 +51,7 @@ main { padding: 1rem clamp(1.25rem, 4vw, 3.5rem) 4rem; display: flex; flex-direc
 }
 
 .brand { display: flex; gap: 0.75rem; align-items: center; }
-.brand-logo { width: 40px; height: 40px; object-fit: cover; border-radius: 0; box-shadow: none; }
+.brand-logo { width: 120px; height: auto; object-fit: contain; border-radius: 0; box-shadow: none; }
 .brand-name { margin: 0; font-weight: 800; letter-spacing: 0.08em; }
 .eyebrow { margin: 0; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-size: 0.8rem; }
 .lede { color: #334155; max-width: 60ch; }
