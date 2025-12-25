@@ -1,0 +1,52 @@
+{
+  "partners": [
+    {
+      "id": "cafe-des-dunes",
+      "name": "Café des Dunes",
+      "category": "Food & boissons",
+      "city": "Villers-sur-Mer",
+      "offer_short": "-15% sur les boissons et brunchs",
+      "access_type": "badge",
+      "code": null,
+      "address_short": "8 place du Marché, Villers-sur-Mer",
+      "maps_url": "https://maps.google.com/?q=8+place+du+March%C3%A9+Villers-sur-Mer",
+      "hours": "Lun–Sam : 8h–19h",
+      "conditions": ["Hors alcool", "Non cumulable avec d'autres remises"],
+      "status": "active",
+      "tags": ["Nouveau"],
+      "updated_at": "2024-12-12"
+    },
+    {
+      "id": "cinema-polaris",
+      "name": "Cinéma Polaris",
+      "category": "Loisirs & sorties",
+      "city": "Villers-sur-Mer",
+      "offer_short": "Place à 7€ + pop-corn offert",
+      "access_type": "code",
+      "code": "POLARIS7",
+      "address_short": "2 avenue des Arts, Villers-sur-Mer",
+      "maps_url": "https://maps.google.com/?q=2+avenue+des+Arts+Villers-sur-Mer",
+      "hours": "Tous les jours : 11h–23h",
+      "conditions": ["Hors avant-premières", "Hors séances 3D"],
+      "status": "active",
+      "tags": ["Exclusif salariés"],
+      "updated_at": "2024-12-05"
+    },
+    {
+      "id": "studio-nordique",
+      "name": "Studio Nordique",
+      "category": "Bien-être & beauté",
+      "city": "Saint-Cloud",
+      "offer_short": "Séance sauna + cryo à 22€ (au lieu de 35€)",
+      "access_type": "code",
+      "code": "NORD22",
+      "address_short": "21 rue des Pins, Saint-Cloud",
+      "maps_url": "https://maps.google.com/?q=21+rue+des+Pins+Saint-Cloud",
+      "hours": "Mar–Dim : 10h–21h",
+      "conditions": ["Réservation obligatoire", "1 passage/semaine"],
+      "status": "test",
+      "tags": ["En test"],
+      "updated_at": "2024-12-08"
+    }
+  ]
+}
