@@ -247,18 +247,50 @@ button, select {
 .link { color: var(--accent-strong); font-weight: 700; }
 
 .welcome {
-  margin: 0 calc(-1 * clamp(1rem, 4vw, 3rem));
-  background: linear-gradient(90deg, #0b2f8a, #1d4ed8);
-  color: #e2e8f0;
-  border-radius: 0;
+  margin: 0;
+  color: var(--text);
+}
+.bienvenue-banner {
+  position: relative;
+  overflow: hidden;
+  min-height: 160px;
+  background-color: #f3f5f8;
+  background-image: url("https://i.ibb.co/xqX461Nw/20251225-105004.jpg");
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  isolation: isolate;
+  box-shadow: var(--shadow);
+}
+.bienvenue-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.35) 45%, rgba(255, 255, 255, 0) 100%);
+  z-index: 0;
+  pointer-events: none;
 }
 .welcome-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1rem, 4vw, 3rem);
+  padding: 28px 32px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
-.welcome h2 { margin: 0.15rem 0 0.25rem; font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.01em; color: #f8fafc; }
-.welcome-subtitle { margin: 0; color: #dbeafe; font-weight: 600; }
+.welcome-content {
+  max-width: 520px;
+  display: grid;
+  gap: 0.4rem;
+}
+.welcome h2 { margin: 0.15rem 0 0.25rem; font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.01em; color: var(--text); }
+.welcome-subtitle { margin: 0; color: var(--muted); font-weight: 600; }
 
 .sr-only {
   position: absolute;
@@ -321,6 +353,8 @@ button, select {
   .card .actions { flex-direction: column; }
   .card .actions .cta, .card .actions .ghost { width: 100%; justify-content: center; }
   .brand-visual { max-width: none; width: 100%; }
+  .bienvenue-banner { min-height: 120px; }
+  .welcome-inner { padding: 18px 18px; }
 }
 .info-bar {
   background: #eef1f7;
