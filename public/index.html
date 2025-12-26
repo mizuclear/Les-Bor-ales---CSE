@@ -28,19 +28,24 @@
   <main>
     <section class="hero" id="home">
       <div class="hero-text">
-        <p class="eyebrow">Portail interne</p>
-        <h1>Accédez aux avantages partenaires en moins de 10 secondes</h1>
+        <p class="eyebrow hero-kicker">Portail interne</p>
+        <div class="hero-headline">
+          <h1>Accédez aux avantages partenaires<br><span class="hero-headline-strong">en moins de <span class="highlight">10 secondes</span></span></h1>
+          <p class="hero-subtitle">Recherchez par partenaire, ville ou catégorie.</p>
+        </div>
         <div class="search-panel" role="search">
           <label class="sr-only" for="search-input">Rechercher un partenaire ou une ville</label>
-          <input id="search-input" type="search" placeholder="Rechercher un partenaire ou une ville" autocomplete="off">
+          <div class="search-field">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79L20 20.5 20.5 20l-5-6zM10.5 14a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" fill="currentColor"></path>
+            </svg>
+            <input id="search-input" type="search" placeholder="Rechercher un partenaire ou une ville" autocomplete="off">
+          </div>
         </div>
       </div>
       <aside class="hero-visual" aria-label="Brand premium">
-        <div class="card brand-card">
-          <p class="eyebrow">Brand</p>
-          <div class="brand-visual">
-            <img src="https://i.ibb.co/rRW5rKmZ/logo-removebg-preview.png" alt="Pass Boréales" loading="lazy">
-          </div>
+        <div class="brand-logo-block">
+          <img class="brand-logo-image" src="https://i.ibb.co/rRW5rKmZ/logo-removebg-preview.png" alt="Pass Boréales" loading="lazy">
         </div>
       </aside>
     </section>
