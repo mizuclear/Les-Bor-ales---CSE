@@ -335,6 +335,26 @@ function showToast(message) {
   setTimeout(() => toast.classList.remove("visible"), 2500);
 }
 
+function initFaqAccordion() {
+  const faqDetails = document.querySelectorAll(".faq-grid details");
+  if (!faqDetails.length) return;
+
+  faqDetails.forEach((item) => {
+    item.removeAttribute("open");
+    const summary = item.querySelector("summary");
+    if (!summary) return;
+
+    summary.addEventListener("click", (event) => {
+      event.preventDefault();
+      const isOpen = item.hasAttribute("open");
+      faqDetails.forEach((detail) => detail.removeAttribute("open"));
+      if (!isOpen) {
+        item.setAttribute("open", "");
+      }
+    });
+  });
+}
+
 async function init() {
   try {
     setLoading(true);
@@ -343,6 +363,7 @@ async function init() {
     setGlobalUpdateDate();
     renderPartners();
     bindFilterEvents();
+    initFaqAccordion();
   } catch (error) {
     resultsMeta.textContent = "Impossible de charger les partenaires.";
     console.error(error);
