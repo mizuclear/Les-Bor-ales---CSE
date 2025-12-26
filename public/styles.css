@@ -54,8 +54,8 @@ main {
   padding: 0.6rem clamp(1rem, 4vw, 2.5rem);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: flex-start;
+  gap: 0.75rem;
   backdrop-filter: blur(8px);
   min-height: 64px;
 }
@@ -72,34 +72,23 @@ main {
 
 .hero {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(1.25rem, 3vw, 2rem);
-  align-items: start;
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+  align-items: stretch;
 }
-.hero-text h1 { margin: 0.25rem 0 0.5rem; font-size: clamp(1.8rem, 4vw, 2.8rem); letter-spacing: -0.01em; }
-.hero-text { display: grid; gap: 1rem; }
-.hero-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.25rem;
-  box-shadow: var(--shadow);
-}
-.rules { margin: 0.5rem 0 0; padding-left: 1.2rem; color: var(--muted); display: grid; gap: 0.4rem; }
-.hero-insights { display: grid; gap: 1rem; }
-.insight-block { height: 100%; display: grid; gap: 0.75rem; }
-.news-list { display: grid; gap: 0.75rem; }
-.news-item { padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #f8fafc; }
-.news-title { margin: 0; font-weight: 700; color: var(--text); }
-.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; }
-.summary-item { padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #f8fafc; }
-.summary-label { margin: 0; color: var(--muted); font-weight: 600; }
-.summary-value { margin: 0.15rem 0 0; font-size: 1.4rem; font-weight: 800; }
+.hero-text h1 { margin: 0.25rem 0 0.5rem; font-size: clamp(1.9rem, 4vw, 3rem); letter-spacing: -0.02em; }
+.hero-text { display: grid; gap: 1.25rem; padding: 1.5rem; background: linear-gradient(135deg, #ffffff, #f5f7fb); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.hero-text .eyebrow { color: #0b2f8a; letter-spacing: 0.1em; }
+.hero-visual { display: flex; align-items: center; }
+.brand-card { height: 100%; display: grid; gap: 0.75rem; align-content: center; justify-items: center; background: #0f172a; color: #e2e8f0; border: 1px solid #1f2937; border-radius: var(--radius); padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 18px 48px rgba(15, 23, 42, 0.25); }
+.brand-card .eyebrow { color: #cbd5e1; letter-spacing: 0.1em; }
+.brand-visual { width: 100%; max-width: 360px; aspect-ratio: 4 / 3; background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 45%), radial-gradient(circle at 80% 40%, rgba(255,255,255,0.12), transparent 55%), linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)); border-radius: calc(var(--radius) - 2px); display: grid; place-items: center; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08); }
+.brand-visual img { width: 70%; height: auto; object-fit: contain; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.25)); }
 
 .search-panel {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
 }
 .search-panel input {
   flex: 1 1 240px;
@@ -257,6 +246,20 @@ button, select {
 
 .link { color: var(--accent-strong); font-weight: 700; }
 
+.welcome {
+  margin: 0 calc(-1 * clamp(1rem, 4vw, 3rem));
+  background: linear-gradient(90deg, #0b2f8a, #1d4ed8);
+  color: #e2e8f0;
+  border-radius: 0;
+}
+.welcome-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1rem, 4vw, 3rem);
+}
+.welcome h2 { margin: 0.15rem 0 0.25rem; font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.01em; color: #f8fafc; }
+.welcome-subtitle { margin: 0; color: #dbeafe; font-weight: 600; }
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -299,7 +302,7 @@ button, select {
   .hero { grid-template-columns: 1fr; }
   .header-meta { justify-items: start; text-align: left; }
   .brand-text .eyebrow { font-size: 0.95rem; }
-  .hero-insights { order: 3; }
+  .hero-visual { order: 2; }
 }
 
 @media (max-width: 640px) {
@@ -317,6 +320,7 @@ button, select {
   .info-bar { padding: 0.35rem 1rem; font-size: 0.9rem; }
   .card .actions { flex-direction: column; }
   .card .actions .cta, .card .actions .ghost { width: 100%; justify-content: center; }
+  .brand-visual { max-width: none; width: 100%; }
 }
 .info-bar {
   background: #eef1f7;
