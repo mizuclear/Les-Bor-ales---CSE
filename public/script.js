@@ -94,64 +94,69 @@ function populateFilters() {
 
 function createPartnerCard(partner) {
   const card = document.createElement("article");
-  card.className = "card";
+  card.className = "card partner-card";
+
+  const statusBadge = document.createElement("span");
+  statusBadge.className = `status-badge ${partner.status}`;
+  const statusLabel = partner.status === "active" ? "Actif" : partner.status === "test" ? "En test" : "En pause";
+  statusBadge.textContent = statusLabel;
+
   const header = document.createElement("div");
-  header.innerHTML = `<p class="eyebrow">${partner.category}</p><h3>${partner.name}</h3>`;
+  header.innerHTML = `<p class="eyebrow subtle-eyebrow">${partner.category}</p><h3>${partner.name}</h3>`;
 
   const offer = document.createElement("p");
   offer.className = "detail-offer clamp-2";
   offer.textContent = partner.offer_short;
 
-  const meta = document.createElement("div");
-  meta.className = "meta";
-  const city = document.createElement("span");
-  city.className = "tag";
-  city.textContent = partner.city;
-  const access = document.createElement("span");
-  access.className = "tag";
-  access.textContent = `Accès : ${accessLabels[partner.access_type] || "—"}`;
-  meta.append(city, access);
+  const meta = document.createElement("p");
+  meta.className = "meta-line";
+  meta.textContent = `📍 ${partner.city} • Accès : ${accessLabels[partner.access_type] || "—"}`;
 
-  const address = document.createElement("p");
-  address.className = "address-line";
-  address.textContent = partner.address_short || partner.address;
-
-  const status = document.createElement("span");
-  status.className = `pill status ${partner.status}`;
-  const statusLabel = partner.status === "active" ? "Actif" : partner.status === "test" ? "En test" : "En pause";
-  status.textContent = statusLabel;
+  const addressLine = partner.address_short || partner.address;
+  const address = addressLine
+    ? Object.assign(document.createElement("p"), {
+        className: "address-line clamp-1",
+        textContent: addressLine,
+      })
+    : null;
 
   const actions = document.createElement("div");
-  actions.className = "actions";
+  actions.className = "actions cta-row";
   const mapBtn = document.createElement("a");
-  mapBtn.className = "cta";
+  mapBtn.className = "ghost compact outline";
   mapBtn.href = partner.maps_url;
   mapBtn.target = "_blank";
   mapBtn.rel = "noreferrer";
   mapBtn.textContent = "Itinéraire";
   mapBtn.setAttribute("aria-label", `Itinéraire vers ${partner.name}`);
-  actions.append(mapBtn);
 
   const accordion = createAccordion(partner);
+  actions.append(mapBtn, accordion.toggle);
 
-  card.append(header, offer, meta, status, address, actions, accordion);
+  card.append(statusBadge, header, offer, meta);
+  if (address) card.append(address);
+  card.append(actions, accordion.content);
   return card;
 }
 
 function createAccordion(partner) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "accordion";
-
   const toggle = document.createElement("button");
   toggle.type = "button";
-  toggle.className = "accordion-toggle";
-  toggle.innerHTML = `<span>Détails</span><span aria-hidden="true">▾</span>`;
+  toggle.className = "ghost compact details-toggle";
+  toggle.innerHTML = `<span>Détails</span><span class="chevron" aria-hidden="true">▾</span>`;
 
   const content = document.createElement("div");
   content.className = "accordion-content";
-  content.hidden = true;
+  content.id = `details-${partner.id}`;
+  content.setAttribute("aria-hidden", "true");
+  content.setAttribute("aria-labelledby", `details-toggle-${partner.id}`);
+  content.style.maxHeight = "0px";
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-controls", content.id);
+  toggle.id = `details-toggle-${partner.id}`;
 
-  if (partner.access_type === "code" || partner.code) {
+  const showCode = partner.access_type === "code" || partner.access_type === "badge_or_code" || partner.code;
+  if (showCode) {
     const codeBlock = document.createElement("div");
     codeBlock.className = "code-block";
 
@@ -211,13 +216,37 @@ function createAccordion(partner) {
   content.appendChild(updated);
 
   toggle.addEventListener("click", () => {
-    const isHidden = content.hidden;
-    content.hidden = !isHidden;
-    toggle.classList.toggle("open", !isHidden);
+    toggleAccordion(toggle, content);
   });
 
-  wrapper.append(toggle, content);
-  return wrapper;
+  return { toggle, content };
+}
+
+function toggleAccordion(toggle, content) {
+  const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+  toggle.setAttribute("aria-expanded", String(!isExpanded));
+  toggle.classList.toggle("open", !isExpanded);
+  content.setAttribute("aria-hidden", String(isExpanded));
+
+  if (!isExpanded) {
+    content.style.maxHeight = `${content.scrollHeight}px`;
+    content.classList.add("expanded");
+    content.addEventListener(
+      "transitionend",
+      () => {
+        if (content.classList.contains("expanded")) {
+          content.style.maxHeight = "none";
+        }
+      },
+      { once: true },
+    );
+  } else {
+    content.style.maxHeight = `${content.scrollHeight}px`;
+    requestAnimationFrame(() => {
+      content.style.maxHeight = "0px";
+      content.classList.remove("expanded");
+    });
+  }
 }
 
 function renderNews() {
