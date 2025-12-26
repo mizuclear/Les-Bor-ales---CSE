@@ -19,10 +19,6 @@
         <p class="brand-name">Portail interne</p>
       </div>
     </div>
-    <div class="header-meta">
-      <p class="pill muted" aria-label="Portail interne">🔒 Interne</p>
-      <button class="ghost header-menu" aria-label="Ouvrir le menu" type="button">☰</button>
-    </div>
   </header>
 
   <div class="info-bar" id="info-bar" aria-live="polite">
@@ -35,46 +31,28 @@
         <p class="eyebrow">Portail interne</p>
         <h1>Accédez aux avantages partenaires en moins de 10 secondes</h1>
         <div class="search-panel" role="search">
-          <label class="sr-only" for="search-input">Rechercher un partenaire, une catégorie, une offre ou une ville</label>
-          <input id="search-input" type="search" placeholder="Rechercher un partenaire, une catégorie, une offre ou une ville" autocomplete="off">
-          <button class="ghost" id="reset-filters" type="button">Réinitialiser</button>
+          <label class="sr-only" for="search-input">Rechercher un partenaire ou une ville</label>
+          <input id="search-input" type="search" placeholder="Rechercher un partenaire ou une ville" autocomplete="off">
         </div>
-        <a class="link jump-link" href="#partners">Aller à la liste des partenaires ↓</a>
       </div>
-      <aside class="hero-insights" aria-label="Nouveautés et résumé des offres">
-        <div class="card insight-block">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Nouveautés</p>
-              <h3>Dernières offres</h3>
-            </div>
-            <span class="pill muted" id="news-count">0</span>
-          </div>
-          <div class="news-list" id="news-list" aria-live="polite"></div>
-        </div>
-        <div class="card insight-block">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Résumé</p>
-              <h3>Vue rapide</h3>
-            </div>
-          </div>
-          <div class="summary-grid" aria-live="polite">
-            <div class="summary-item">
-              <p class="summary-label">Actifs</p>
-              <p class="summary-value" id="summary-active">0</p>
-            </div>
-            <div class="summary-item">
-              <p class="summary-label">En test</p>
-              <p class="summary-value" id="summary-test">0</p>
-            </div>
-            <div class="summary-item">
-              <p class="summary-label">Villes couvertes</p>
-              <p class="summary-value" id="summary-cities">0</p>
-            </div>
+      <aside class="hero-visual" aria-label="Brand premium">
+        <div class="card brand-card">
+          <p class="eyebrow">Brand</p>
+          <div class="brand-visual">
+            <img src="https://i.ibb.co/rRW5rKmZ/logo-removebg-preview.png" alt="Pass Boréales" loading="lazy">
           </div>
         </div>
       </aside>
+    </section>
+
+    <section class="welcome" aria-labelledby="welcome-title">
+      <div class="welcome-inner">
+        <div>
+          <p class="eyebrow">Bienvenue</p>
+          <h2 id="welcome-title">Bienvenue sur le Pass Boréales</h2>
+          <p class="welcome-subtitle">Trouvez vos avantages en quelques secondes grâce à la recherche et aux filtres.</p>
+        </div>
+      </div>
     </section>
 
     <section class="partners" aria-labelledby="partners-title" id="partners">

@@ -3,16 +3,10 @@ const citySelect = document.getElementById("filter-city");
 const accessSelect = document.getElementById("filter-access");
 const sortSelect = document.getElementById("sort-by");
 const searchInput = document.getElementById("search-input");
-const resetFiltersBtn = document.getElementById("reset-filters");
 const partnerCards = document.getElementById("partner-cards");
 const resultsMeta = document.getElementById("results-meta");
 const noResults = document.getElementById("no-results");
 const infoBarText = document.getElementById("info-bar-text");
-const newsList = document.getElementById("news-list");
-const newsCount = document.getElementById("news-count");
-const summaryActive = document.getElementById("summary-active");
-const summaryTest = document.getElementById("summary-test");
-const summaryCities = document.getElementById("summary-cities");
 
 const toast = document.getElementById("toast");
 
@@ -249,50 +243,6 @@ function toggleAccordion(toggle, content) {
   }
 }
 
-function renderNews() {
-  newsList.innerHTML = "";
-  const recent = [...state.partners]
-    .filter((partner) => partner.status !== "archived")
-    .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
-    .slice(0, 3);
-
-  newsCount.textContent = recent.length;
-
-  if (!recent.length) {
-    const empty = document.createElement("p");
-    empty.className = "muted";
-    empty.textContent = "Aucune offre récente.";
-    newsList.appendChild(empty);
-    return;
-  }
-
-  recent.forEach((partner) => {
-    const item = document.createElement("div");
-    item.className = "news-item";
-    item.innerHTML = `
-      <p class="eyebrow">${partner.category}</p>
-      <p class="news-title">${partner.name}</p>
-      <p class="muted small">MAJ : ${formatDate(partner.updated_at)} • ${partner.city}</p>
-    `;
-    newsList.appendChild(item);
-  });
-}
-
-function renderSummary() {
-  const activeCount = state.partners.filter((p) => p.status === "active").length;
-  const testCount = state.partners.filter((p) => p.status === "test").length;
-  const cities = new Set(state.partners.map((p) => p.city).filter(Boolean));
-
-  summaryActive.textContent = activeCount;
-  summaryTest.textContent = testCount;
-  summaryCities.textContent = cities.size;
-}
-
-function renderInsights() {
-  renderNews();
-  renderSummary();
-}
-
 function sortPartners(a, b, mode) {
   if (mode === "recent") {
     return new Date(b.updated_at) - new Date(a.updated_at);
@@ -377,15 +327,6 @@ function bindFilterEvents() {
     state.filters.search = e.target.value.trim();
     renderPartners();
   });
-  resetFiltersBtn.addEventListener("click", () => {
-    state.filters = { search: "", category: "", city: "", access: "", sort: "alphabetical" };
-    categorySelect.value = "";
-    citySelect.value = "";
-    accessSelect.value = "";
-    sortSelect.value = "alphabetical";
-    searchInput.value = "";
-    renderPartners();
-  });
 }
 
 function showToast(message) {
@@ -400,7 +341,6 @@ async function init() {
     state.partners = await loadPartners();
     populateFilters();
     setGlobalUpdateDate();
-    renderInsights();
     renderPartners();
     bindFilterEvents();
   } catch (error) {
